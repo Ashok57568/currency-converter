@@ -1,21 +1,26 @@
-const hour = document.querySelector(".hour");
-const minute = document.querySelector(".minute");
-const second = document.querySelector(".second");
+const kits = ["crash", "kick", "snare", "tom"];
 
-function setDate() {
-  const now = new Date();
+const containerEl = document.querySelector(".container");
 
-  const getSecond = now.getSeconds();
-  const getMinute = now.getMinutes();
-  const getHour = now.getHours();
-
-  const secondDegree = (getSecond / 60) * 360;
-  const minuteDegree = (getMinute / 60) * 360;
-  const hourDegree = (getHour / 12) * 360;
-
-  second.style.transform = `rotate(${secondDegree}deg)`;
-  minute.style.transform = `rotate(${minuteDegree}deg)`;
-  hour.style.transform = `rotate(${hourDegree}deg)`;
-}
-
-setInterval(setDate, 1000);
+kits.forEach((kit) => {
+  const btnEl = document.createElement("button");
+  btnEl.classList.add("btn");
+  btnEl.innerText = kit;
+  btnEl.style.backgroundImage = "url(images/" + kit + ".png)";
+  containerEl.appendChild(btnEl);
+  const audioEl = document.createElement("audio");
+  audioEl.src = "sounds/" + kit + ".mp3";
+  containerEl.appendChild(audioEl);
+  btnEl.addEventListener("click", () => {
+    audioEl.play();
+  });
+  window.addEventListener("keydown", (event) => {
+    if (event.key === kit.slice(0, 1)) {
+      audioEl.play();
+      btnEl.style.transform = "scale(.9)";
+      setTimeout(() => {
+        btnEl.style.transform = "scale(1)";
+      }, 100);
+    }
+  });
+});
